@@ -1,0 +1,89 @@
+name: Firewall Governance
+shortDescription: Query CMDB assets and audit Panorama/NGFW firewall policies via MCP
+description: |
+  A standard MCP (Model Context Protocol) server designed for firewall policy governance. It integrates CMDB asset queries and Palo Alto Panorama/NGFW policy auditing capabilities, supporting direct invocation from any MCP client (Claude Desktop, Cursor, Cline, Dify, etc.).
+
+  ## Features
+  - **CMDB Asset Search**: Query business system asset information by keyword
+  - **Firewall Object Lookup**: Retrieve firewall address objects by IP address
+  - **Policy Search**: Search firewall policies by source/destination IP addresses
+  - **Multi-Client Support**: Works with Claude Desktop, Cursor, Cline, Dify, and any MCP-compatible client
+  - **Enterprise Ready**: Designed following 12-Factor App configuration principles
+
+  ## What you'll need to connect
+
+  **Required (Firewall):**
+  - **FW_HOSTNAME**: Panorama or NGFW management IP address (e.g., 10.1.2.150)
+  - **FW_USERNAME**: Firewall management username
+  - **FW_PASSWORD**: Firewall management password
+
+  **Required (CMDB):**
+  - **CMDB_SERVER**: CMDB server URL (e.g., http://10.1.4.100)
+  - **CMDB_APP_ID**: CMDB application ID
+  - **CMDB_APP_SECRET**: CMDB application secret
+  - **CMDB_VIEW_ID**: CMDB view ID for asset queries
+
+  ## Use Cases
+  - Audit firewall policies before changes
+  - Search asset information for compliance
+  - Validate network access rules
+  - Policy governance automation
+
+metadata:
+  categories: Security, Infrastructure, Networking
+icon: https://files.catbox.moe/b282tm.png
+repoURL: https://github.com/1182872360/firewall-mcp
+env:
+- key: FW_HOSTNAME
+  name: Firewall Hostname
+  required: true
+  sensitive: false
+  description: Panorama or NGFW management IP address
+- key: FW_USERNAME
+  name: Firewall Username
+  required: true
+  sensitive: false
+  description: Firewall management username
+- key: FW_PASSWORD
+  name: Firewall Password
+  required: true
+  sensitive: true
+  description: Firewall management password
+- key: CMDB_SERVER
+  name: CMDB Server URL
+  required: true
+  sensitive: false
+  description: CMDB server URL (e.g., http://10.1.4.100)
+- key: CMDB_APP_ID
+  name: CMDB App ID
+  required: true
+  sensitive: false
+  description: CMDB application ID
+- key: CMDB_APP_SECRET
+  name: CMDB App Secret
+  required: true
+  sensitive: true
+  description: CMDB application secret
+- key: CMDB_VIEW_ID
+  name: CMDB View ID
+  required: true
+  sensitive: false
+  description: CMDB view ID for asset queries
+runtime: uvx
+uvxConfig:
+  package: git+https://github.com/1182872360/firewall-mcp.git
+
+toolPreview:
+- name: search_cmdb_asset
+  description: Search CMDB for business system assets by keyword. Returns asset information including system name, IP addresses, responsible parties, and other metadata.
+  params:
+    keyword: Search keyword for asset lookup (e.g., system name, IP address, or application identifier)
+- name: get_firewall_object
+  description: Retrieve firewall address object information by IP address. Returns object name, type, and associated configuration from Panorama/NGFW.
+  params:
+    ip_address: The IP address to look up in firewall address objects
+- name: search_firewall_policy
+  description: Search firewall security policies by source and/or destination IP addresses. Returns matching policy rules with actions, zones, and other details.
+  params:
+    source_ip: Source IP address to search for in policies (optional)
+    destination_ip: Destination IP address to search for in policies (optional)

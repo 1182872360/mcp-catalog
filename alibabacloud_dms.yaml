@@ -1,0 +1,144 @@
+name: Alibaba Cloud DMS
+shortDescription: AI-era data security access gateway with NL2SQL for 40+ data sources
+description: |
+  A universal multi-cloud data MCP Server supporting over 40 types of data source connections, providing secure, unified data access in a single platform. Supports full range of Alibaba Cloud services and mainstream databases/data warehouses.
+
+  ## Core Features
+
+  **Secure Access:**
+  - Account and password security management without manual maintenance
+  - Intranet access support for enhanced data security
+  - Fine-grained permission control at instance, database, table, field, and row level
+  - High-risk SQL identification and blocking with built-in rule engine
+  - SQL audit trail for compliance and regulatory requirements
+
+  **Intelligent Data Inquiry:**
+  - Built-in NL2SQL algorithm for natural language to SQL conversion
+  - Personalized knowledge base for custom business queries
+  - Direct question-to-answer data retrieval
+
+  **Multi-data Source Support:**
+  - 40+ mainstream databases and data warehouses
+  - Unified management across dev, test, and production environments
+  - Seamless integration across Alibaba Cloud, AWS, and self-hosted databases
+
+  ## Supported Data Sources
+
+  **Alibaba Cloud:** RDS, PolarDB, ADB series, Lindorm, TableStore, MaxCompute
+
+  **Mainstream DBs:** MySQL, MariaDB, PostgreSQL, Oracle, SQL Server, Redis, MongoDB, StarRocks, ClickHouse, SelectDB, DB2, OceanBase, GaussDB, BigQuery
+
+  ## Usage Modes
+
+  - **Multi-instance Mode**: Manage and access multiple database instances
+  - **Single Database Mode**: Direct access to a specific database via CONNECTION_STRING
+
+  ## What you'll need to connect
+
+  **Required:**
+  - **Alibaba Cloud Access Key ID**: Your Alibaba Cloud credential access key
+  - **Alibaba Cloud Access Key Secret**: Your Alibaba Cloud credential secret
+  - **AliyunDMSFullAccess** permission on your account
+
+  **Optional:**
+  - **Security Token**: Required when using STS Token for temporary credentials
+  - **Connection String**: For single database mode (format: dbName@host:port)
+
+metadata:
+  categories: Database, Data Security, AI/ML
+icon: https://files.catbox.moe/91l4xe.png
+repoURL: https://github.com/aliyun/alibabacloud-dms-mcp-server
+env:
+- key: ALIBABA_CLOUD_ACCESS_KEY_ID
+  name: Alibaba Cloud Access Key ID
+  required: true
+  sensitive: true
+  description: Your Alibaba Cloud Access Key ID
+- key: ALIBABA_CLOUD_ACCESS_KEY_SECRET
+  name: Alibaba Cloud Access Key Secret
+  required: true
+  sensitive: true
+  description: Your Alibaba Cloud Access Key Secret
+- key: ALIBABA_CLOUD_SECURITY_TOKEN
+  name: Security Token (STS)
+  required: false
+  sensitive: true
+  description: Optional STS security token for temporary credentials
+- key: CONNECTION_STRING
+  name: Connection String
+  required: false
+  sensitive: false
+  description: Optional connection string for single database mode (format dbName@host:port)
+runtime: uvx
+uvxConfig:
+  package: alibabacloud-dms-mcp-server@latest
+
+toolPreview:
+- name: addInstance
+  description: Add an instance to DMS. If the instance already exists, return the existing instance information.
+  params:
+    db_user: Username for connecting to the database
+    db_password: Password for connecting to the database
+    host: Connection address of the instance (optional)
+    port: Connection port number of the instance (optional)
+    region: Region where the instance is located, e.g. cn-hangzhou (optional)
+- name: listInstances
+  description: Search for instances from DMS by various criteria.
+  params:
+    search_key: Search key (e.g., instance host, instance alias) (optional)
+    db_type: Instance type (e.g., mysql, polardb, oracle, postgresql) (optional)
+    env_type: Environment type (e.g., product, dev, test) (optional)
+- name: getInstance
+  description: Retrieve instance details from DMS based on host and port information.
+  params:
+    host: Connection address of the instance
+    port: Connection port number of the instance
+    sid: Required for Oracle-like databases (optional)
+- name: searchDatabase
+  description: Search for databases in DMS based on schema name.
+  params:
+    search_key: Schema name to search for
+    page_number: Page number to retrieve (optional)
+    page_size: Number of results per page (optional)
+- name: getDatabase
+  description: Retrieve detailed information about a specific database from DMS.
+  params:
+    host: Connection address of the instance
+    port: Connection port number of the instance
+    schema_name: Database name
+- name: listTable
+  description: Search for data tables in DMS based on database ID and table name.
+  params:
+    database_id: Database ID to limit the search scope
+    search_name: String keyword to match table names (optional)
+- name: getTableDetailInfo
+  description: Retrieve detailed metadata for a specific table, including field and index details.
+  params:
+    table_guid: Unique identifier for the table (format dmsTableId.schemaName.tableName)
+- name: executeScript
+  description: Execute an SQL script through DMS and return the results.
+  params:
+    database_id: DMS database ID
+    script: SQL script content to execute
+- name: nl2sql
+  description: Convert natural language questions into executable SQL queries.
+  params:
+    question: Natural language question to convert into SQL
+    database_id: DMS database ID
+    knowledge: Additional context or database knowledge (optional)
+- name: askDatabase
+  description: Retrieve database execution results directly using natural language questions.
+  params:
+    question: Natural language question to be converted into SQL
+    knowledge: Additional context or database knowledge (optional)
+- name: fixSql
+  description: Repair SQL statements based on error messages.
+  params:
+    database_id: DMS database ID
+    sql: The SQL statement to be repaired
+    error: The error message associated with the SQL
+- name: optimizeSql
+  description: Optimize SQL statements for better performance.
+  params:
+    database_id: DMS database ID
+    sql: The SQL statement to be optimized

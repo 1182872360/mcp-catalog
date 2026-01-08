@@ -1,0 +1,103 @@
+name: Alibaba Cloud FC
+shortDescription: Deploy and manage serverless applications on Alibaba Cloud Function Compute
+description: |
+  A Model Context Protocol (MCP) server for Alibaba Cloud Function Compute (FC) service, based on Serverless Devs and OpenAPI. Deploy, manage, and configure serverless functions directly from your AI coding assistant.
+
+  ## Features
+  - **Function Deployment**: Package and deploy custom runtime functions to Alibaba Cloud FC
+  - **Function Management**: Create, update, delete, and list functions across regions
+  - **Custom Domain Configuration**: Manage custom domain routes for your functions
+  - **Multi-Runtime Support**: Deploy Python, Node.js, Java, Golang, and custom runtime applications
+  - **Built-in Prompts**: Professional FC Copilot prompts for guided deployment
+
+  ## What you'll need to connect
+
+  **Required:**
+  - **Alibaba Cloud Access Key ID**: Your Alibaba Cloud credential access key
+  - **Alibaba Cloud Access Key Secret**: Your Alibaba Cloud credential secret
+
+  **IAM Permissions Recommended:**
+  - AdministratorAccess (recommended for full functionality), or at minimum:
+  - AliyunFCFullAccess (required)
+  - AliyunDevsFullAccess (recommended)
+  - AliyunVPCFullAccess (recommended)
+  - AliyunLogFullAccess (recommended)
+  - AliyunEventBridgeFullAccess (optional)
+
+  ## Usage Scenarios
+  Integrate Alibaba Cloud Function Compute capabilities into agent applications that support MCP Client (such as Cursor, Claude, Cline).
+
+  ## Basic Usage
+
+  ### Common Workflows
+  1. **Code Generation**: Ask AI to generate a project (e.g., a 2048 game)
+  2. **Deployment**: Deploy the project to Alibaba Cloud Function Compute
+  3. **Management**: Update, monitor, and manage deployed functions
+  4. **Custom Domains**: Configure custom domain routes for your applications
+
+metadata:
+  categories: Infrastructure, Cloud Services, Serverless
+icon: https://files.catbox.moe/91l4xe.png
+repoURL: https://github.com/aliyun/alibabacloud-fc-mcp-server
+env:
+- key: ALIBABA_CLOUD_ACCESS_KEY_ID
+  name: Alibaba Cloud Access Key ID
+  required: true
+  sensitive: true
+  description: Your Alibaba Cloud Access Key ID
+- key: ALIBABA_CLOUD_ACCESS_KEY_SECRET
+  name: Alibaba Cloud Access Key Secret
+  required: true
+  sensitive: true
+  description: Your Alibaba Cloud Access Key Secret
+runtime: npx
+npxConfig:
+  package: alibabacloud-fc-mcp-server
+
+toolPreview:
+- name: put-custom-runtime-function
+  description: Package a project that meets Alibaba Cloud custom runtime requirements, create a function, and deploy the code to that function. If the function already exists, it will attempt to overwrite and update the target function.
+  params:
+    projectPath: Path to the project to deploy
+    functionName: Name of the function to create or update
+    region: Alibaba Cloud region (e.g., cn-hangzhou)
+- name: update-custom-runtime-function
+  description: Update a custom runtime function. Only the provided parameters will be updated; others remain unchanged.
+  params:
+    functionName: Name of the function to update
+    region: Alibaba Cloud region
+- name: get-function
+  description: Retrieve detailed information about a specified function.
+  params:
+    functionName: Name of the function to get details for
+    region: Alibaba Cloud region
+- name: list-functions
+  description: List all functions in the specified region, returning only function names and partial information.
+  params:
+    region: Alibaba Cloud region to list functions from
+- name: delete-function
+  description: Delete a specified function.
+  params:
+    functionName: Name of the function to delete
+    region: Alibaba Cloud region
+- name: get-custom-domain-config
+  description: Query the custom domain route configuration.
+  params:
+    domainName: The custom domain name to query
+- name: update-custom-domain-config
+  description: Update the custom domain route configuration.
+  params:
+    domainName: The custom domain name to update
+    routeConfig: The new route configuration
+- name: create-custom-domain-config
+  description: Create a custom domain route configuration. The domain must already be CNAMEed to the public Function Compute domain.
+  params:
+    domainName: The custom domain name to create
+    routeConfig: The route configuration
+- name: delete-custom-domain-config
+  description: Delete the custom domain route configuration.
+  params:
+    domainName: The custom domain name to delete
+- name: get-custom-runtime-prompt
+  description: Get the custom runtime prompt with FC Copilot guidelines for building and deploying code.
+  params: {}

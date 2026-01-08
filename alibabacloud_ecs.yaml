@@ -1,0 +1,112 @@
+name: Alibaba Cloud ECS
+shortDescription: Manage Alibaba Cloud ECS instances with full lifecycle and resource query capabilities
+description: |
+  A Model Context Protocol (MCP) server for Alibaba Cloud Elastic Compute Service (ECS) management. Create, start, stop, reboot, and delete ECS instances, as well as query regions, zones, instance types, images, security groups, and VSwitches.
+
+  ## Features
+  - 🖥️ **Instance Management**: Create, start, stop, reboot, and delete ECS instances
+  - 🔍 **Resource Query**: Query regions, availability zones, instance types, images, security groups, and VSwitches
+  - 🛡️ **Smart Error Handling**: Structured error responses with automatic tool recommendations
+  - 🔗 **Tool Chain Guidance**: Auto-guides LLM to call correct tools when parameters are missing
+
+  ## What you'll need to connect
+
+  **Required:**
+  - **Alibaba Cloud Access Key ID**: Your Alibaba Cloud credential access key
+  - **Alibaba Cloud Access Key Secret**: Your Alibaba Cloud credential secret
+
+  **Optional:**
+  - **Default Region**: Default ECS region (e.g., cn-hangzhou)
+
+  ## Typical Workflow
+
+  1. **Query Regions**: describeRegions
+  2. **Query Images**: describeImages(region_id="cn-hangzhou")
+  3. **Query Instance Types**: describeInstanceTypes(region_id="cn-hangzhou")
+  4. **Query Security Groups**: describeSecurityGroups(region_id="cn-hangzhou")
+  5. **Query VSwitches**: describeVSwitches(region_id="cn-hangzhou")
+  6. **Create Instance**: runInstances(...)
+
+metadata:
+  categories: Infrastructure, Cloud Services, Compute
+icon: https://files.catbox.moe/91l4xe.png
+repoURL: https://github.com/1182872360/alibabacloud-ecs-mcp-server
+env:
+- key: ALIBABA_CLOUD_ACCESS_KEY_ID
+  name: Alibaba Cloud Access Key ID
+  required: true
+  sensitive: true
+  description: Your Alibaba Cloud Access Key ID
+- key: ALIBABA_CLOUD_ACCESS_KEY_SECRET
+  name: Alibaba Cloud Access Key Secret
+  required: true
+  sensitive: true
+  description: Your Alibaba Cloud Access Key Secret
+- key: ECS_DEFAULT_REGION
+  name: Default Region
+  required: false
+  sensitive: false
+  description: Default ECS region (e.g., cn-hangzhou)
+runtime: uvx
+uvxConfig:
+  package: git+https://github.com/1182872360/alibabacloud-ecs-mcp-server.git
+
+toolPreview:
+- name: runInstances
+  description: Create and launch new ECS instances with specified configurations.
+  params:
+    region_id: Region ID (e.g., cn-hangzhou)
+    image_id: Image ID for the instance
+    instance_type: Instance type specification
+    security_group_id: Security group ID
+    vswitch_id: VSwitch ID for VPC networking
+- name: startInstance
+  description: Start a stopped ECS instance.
+  params:
+    instance_id: The ID of the instance to start
+- name: stopInstance
+  description: Stop a running ECS instance.
+  params:
+    instance_id: The ID of the instance to stop
+- name: rebootInstance
+  description: Reboot an ECS instance.
+  params:
+    instance_id: The ID of the instance to reboot
+- name: deleteInstance
+  description: Delete an ECS instance permanently.
+  params:
+    instance_id: The ID of the instance to delete
+- name: describeInstances
+  description: Query and list ECS instances with optional filters.
+  params:
+    region_id: Region ID to query instances from
+    instance_ids: List of specific instance IDs to query (optional)
+- name: describeInstanceAttribute
+  description: Get detailed attributes of a specific ECS instance.
+  params:
+    instance_id: The ID of the instance to describe
+- name: describeRegions
+  description: List all available Alibaba Cloud regions.
+  params: {}
+- name: describeZones
+  description: List all availability zones in a specific region.
+  params:
+    region_id: Region ID to query zones from
+- name: describeInstanceTypes
+  description: Query available instance type specifications.
+  params:
+    region_id: Region ID to query instance types from
+- name: describeImages
+  description: Query available system and custom images.
+  params:
+    region_id: Region ID to query images from
+    image_type: Image type filter (system, custom, etc.) (optional)
+- name: describeSecurityGroups
+  description: List security groups in a specific region.
+  params:
+    region_id: Region ID to query security groups from
+- name: describeVSwitches
+  description: List VSwitches (virtual switches) in a specific region.
+  params:
+    region_id: Region ID to query VSwitches from
+    vpc_id: VPC ID to filter VSwitches (optional)
