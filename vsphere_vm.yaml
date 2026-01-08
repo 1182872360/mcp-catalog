@@ -1,0 +1,92 @@
+name: vSphere VM
+shortDescription: 查询与创建 vSphere 虚拟机（模板、集群、主机、资源池等）
+description: |
+  一个面向 vSphere 的 Model Context Protocol 服务器，支持查询基础资源与从模板创建虚拟机。提供结构化错误处理、统一响应模型与参数验证，适合在 AI 助手中安全地进行 vSphere 运维与资源编排。
+
+  ## 特性
+  - 资源查询：模板、集群、主机、文件夹、资源池、虚拟机清单
+  - 生命周期：基于模板创建虚拟机并可指定 CPU、内存、文件夹、资源池
+  - 结构化错误：将 vSphere API 错误转换为 LLM 友好的格式
+  - 参数校验：对每个工具参数进行细致的合法性校验
+  - 统一响应：所有工具使用一致的响应模型
+
+metadata:
+  categories: Cloud Infrastructure,Virtualization,DevOps
+icon: https://avatars.githubusercontent.com/u/17539307?s=48&v=4
+repoURL: https://github.com/1182872360/vsphere_vm_mcp_server
+
+env:
+  - name: vSphere 主机地址
+    key: VSPHERE_HOST
+    description: vCenter/vSphere 主机地址
+    required: true
+    sensitive: false
+  - name: vSphere 用户名
+    key: VSPHERE_USERNAME
+    description: vSphere 登录用户名
+    required: true
+    sensitive: false
+  - name: vSphere 密码
+    key: VSPHERE_PASSWORD
+    description: vSphere 登录密码
+    required: true
+    sensitive: true
+  - name: vSphere 端口
+    key: VSPHERE_PORT
+    description: vSphere 端口（默认 443）
+    required: false
+    sensitive: false
+  - name: 服务器监听地址
+    key: SERVER_HOST
+    description: MCP 服务器监听地址（用于远程连接）
+    required: true
+    sensitive: false
+  - name: 服务器监听端口
+    key: SERVER_PORT
+    description: MCP 服务器监听端口（用于远程连接）
+    required: true
+    sensitive: false
+  - name: 传输协议
+    key: SERVER_TRANSPORT
+    description: 服务器传输协议（stdio/sse/http，远程推荐 sse）
+    required: false
+    sensitive: false
+
+runtime: remote
+remoteConfig:
+  URLTemplate: http://${SERVER_HOST}:${SERVER_PORT}/sse
+
+toolPreview:
+  - name: describeTemplates
+    description: 查询可用的虚拟机模板列表
+    params:
+      cluster_name: 可选，按集群名称过滤
+  - name: describeHosts
+    description: 查询 ESXi 主机列表及资源使用情况
+    params:
+      cluster_name: 可选，按集群名称过滤
+  - name: describeClusters
+    description: 查询可用的集群列表
+    params: {}
+  - name: describeFolders
+    description: 查询可用的文件夹列表
+    params: {}
+  - name: describeResourcePools
+    description: 查询可用的资源池列表
+    params:
+      cluster_name: 可选，按集群名称过滤
+  - name: describeVMs
+    description: 查询虚拟机列表
+    params:
+      cluster_name: 可选，集群名称
+      vm_name: 可选，虚拟机名称匹配
+  - name: createVMFromTemplate
+    description: 从模板创建虚拟机
+    params:
+      vm_name: 必需，虚拟机名称
+      template_name: 必需，模板名称
+      cluster_name: 必需，集群名称
+      cpu: 可选，CPU 数量
+      memory_mb: 可选，内存大小（MB）
+      folder_name: 可选，目标文件夹
+      resource_pool_name: 可选，目标资源池
