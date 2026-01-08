@@ -36,25 +36,10 @@ env:
     description: vSphere 端口（默认 443）
     required: false
     sensitive: false
-  - name: 服务器监听地址
-    key: SERVER_HOST
-    description: MCP 服务器监听地址（用于远程连接）
-    required: true
-    sensitive: false
-  - name: 服务器监听端口
-    key: SERVER_PORT
-    description: MCP 服务器监听端口（用于远程连接）
-    required: true
-    sensitive: false
-  - name: 传输协议
-    key: SERVER_TRANSPORT
-    description: 服务器传输协议（stdio/sse/http，远程推荐 sse）
-    required: false
-    sensitive: false
 
-runtime: remote
-remoteConfig:
-  URLTemplate: http://${SERVER_HOST}:${SERVER_PORT}/sse
+runtime: uvx
+uvxConfig:
+  package: git+https://github.com/1182872360/vsphere_vm_mcp_server.git
 
 toolPreview:
   - name: describeTemplates
