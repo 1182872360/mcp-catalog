@@ -80,6 +80,13 @@ toolPreview:
       network_name: 可选，网络名称
       folder_name: 可选，目标文件夹
       resource_pool_name: 可选，目标资源池
+      ip_address: 可选，静态 IP 地址
+      subnet_mask: 可选，子网掩码
+      gateway: 可选，默认网关
+      hostname: 可选，操作系统主机名
+      domain: 可选，加入的域
+      dns_servers: 可选，DNS 服务器列表（逗号分隔）
+      password: 可选，Administrator/Root 密码
   - name: getVMPowerState
     description: 查询虚拟机电源状态
     params:
