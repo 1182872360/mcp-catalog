@@ -80,3 +80,15 @@ toolPreview:
       network_name: 可选，网络名称
       folder_name: 可选，目标文件夹
       resource_pool_name: 可选，目标资源池
+  - name: getVMPowerState
+    description: 查询虚拟机电源状态
+    params:
+      vm_name: 必需，虚拟机名称
+  - name: reconfigureVM
+    description: 重新配置虚拟机资源（CPU、内存、磁盘、网络）
+    params:
+      vm_name: 必需，虚拟机名称
+      cpu: 可选，新的 CPU 数量
+      memory_mb: 可选，新的内存大小（MB）
+      disk_size_gb: 可选，增加磁盘容量（GB）
+      network_name: 可选，修改连接的网络名称
