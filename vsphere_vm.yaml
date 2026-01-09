@@ -60,6 +60,10 @@ toolPreview:
     description: 查询可用的资源池列表
     params:
       cluster_name: 可选，按集群名称过滤
+  - name: describeNetworks
+    description: 查询可用的网络列表
+    params:
+      cluster_name: 可选，按集群名称过滤
   - name: describeVMs
     description: 查询虚拟机列表
     params:
@@ -73,5 +77,6 @@ toolPreview:
       cluster_name: 必需，集群名称
       cpu: 可选，CPU 数量
       memory_mb: 可选，内存大小（MB）
+      network_name: 可选，网络名称
       folder_name: 可选，目标文件夹
       resource_pool_name: 可选，目标资源池
